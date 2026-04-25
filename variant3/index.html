@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "wh0b8xmnk2");
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Grab Food Search Results - Variant 3</title>
-  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <title>Grab Food – Search Results (Variant 3)</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
             surface: '#f9f9f9',
             'surface-dim': '#dadada',
+            'surface-bright': '#f9f9f9',
             'surface-container-lowest': '#ffffff',
             'surface-container-low': '#f3f3f4',
             'surface-container': '#eeeeee',
@@ -26,74 +36,130 @@
             'surface-container-highest': '#e2e2e2',
             'on-surface': '#1a1c1c',
             'on-surface-variant': '#3d4a3d',
+            'inverse-surface': '#2f3131',
+            'inverse-on-surface': '#f0f1f1',
             outline: '#6d7b6c',
             'outline-variant': '#bccbb9',
+            'surface-tint': '#006e2e',
             primary: '#006e2e',
-            'primary-container': '#00b14f',
             'on-primary': '#ffffff',
+            'primary-container': '#00b14f',
             'on-primary-container': '#003a15',
+            'inverse-primary': '#52e078',
             secondary: '#5f5e5e',
+            'on-secondary': '#ffffff',
+            'secondary-container': '#e2dfde',
+            'on-secondary-container': '#636262',
             tertiary: '#5d5f5f',
-            error: '#ba1a1a'
+            'on-tertiary': '#ffffff',
+            'tertiary-container': '#999a9a',
+            'on-tertiary-container': '#303233',
+            error: '#ba1a1a',
+            'on-error': '#ffffff',
+            'error-container': '#ffdad6',
+            'on-error-container': '#93000a',
+            'primary-fixed': '#71fe91',
+            'primary-fixed-dim': '#52e078',
+            'on-primary-fixed': '#002109',
+            'on-primary-fixed-variant': '#005321',
+            background: '#f9f9f9',
+            'on-background': '#1a1c1c',
+            'surface-variant': '#e2e2e2',
           },
-          fontFamily: { sans: ['Inter', 'sans-serif'] },
-          boxShadow: {
-            ambient: '0 4px 12px rgba(0, 0, 0, 0.04)',
-            floating: '0 12px 30px rgba(0, 0, 0, 0.12)'
-          }
-        }
-      }
+          borderRadius: {
+            sm: '0.25rem',
+            DEFAULT: '0.5rem',
+            md: '0.75rem',
+            lg: '1rem',
+            xl: '1.5rem',
+            full: '9999px',
+          },
+          spacing: {
+            'container-margin': '16px',
+            xl: '32px',
+            lg: '24px',
+            md: '16px',
+            sm: '8px',
+            xs: '4px',
+            base: '8px',
+            gutter: '16px',
+            '2xl': '48px',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          fontSize: {
+            'display-lg': ['32px', { lineHeight: '40px', fontWeight: '700', letterSpacing: '-0.02em' }],
+            'display-md': ['24px', { lineHeight: '32px', fontWeight: '700', letterSpacing: '-0.01em' }],
+            'headline-sm': ['20px', { lineHeight: '28px', fontWeight: '600' }],
+            'body-lg': ['18px', { lineHeight: '26px', fontWeight: '400' }],
+            'body-md': ['16px', { lineHeight: '24px', fontWeight: '400' }],
+            'body-sm': ['14px', { lineHeight: '20px', fontWeight: '400' }],
+            'label-lg': ['14px', { lineHeight: '18px', fontWeight: '600', letterSpacing: '0.01em' }],
+            'label-md': ['12px', { lineHeight: '16px', fontWeight: '500' }],
+            'label-sm': ['10px', { lineHeight: '14px', fontWeight: '600' }],
+          },
+        },
+      },
     };
   </script>
+
   <style>
     * { box-sizing: border-box; }
-    html { background: #d7d7d7; }
+
+    html { background: #d0d0d0; }
+
     body {
       margin: 0;
-      min-height: 100vh;
-      font-family: Inter, sans-serif;
-      color: #1a1c1c;
-      background: #d7d7d7;
+      min-height: 100dvh;
+      font-family: 'Inter', sans-serif;
+      background: #d0d0d0;
     }
+
     #root {
       width: 100%;
-      max-width: 533px;
-      min-height: 100vh;
+      max-width: 430px;
+      min-height: 100dvh;
       margin: 0 auto;
       background: #f9f9f9;
-      box-shadow: 0 0 48px rgba(0, 0, 0, 0.24);
       position: relative;
       overflow-x: hidden;
+      box-shadow: 0 0 64px rgba(0,0,0,0.28);
     }
+
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
       line-height: 1;
+      user-select: none;
     }
+
     .icon-fill { font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24; }
+
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
     .safe-bottom { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
-    .sheet {
-      animation: sheet-in 260ms cubic-bezier(.2, .8, .2, 1);
-      transform-origin: bottom center;
-    }
+    .safe-top { padding-top: max(0px, env(safe-area-inset-top)); }
+
     @keyframes sheet-in {
-      from { opacity: 0; transform: translateY(28px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-    .fade-in { animation: fade-in 180ms ease-out; }
+    .sheet { animation: sheet-in 260ms cubic-bezier(.2,.8,.2,1); }
+
     @keyframes fade-in {
       from { opacity: 0; }
-      to { opacity: 1; }
+      to   { opacity: 1; }
     }
-    .toast {
-      animation: toast-in 240ms ease-out;
-    }
+    .fade-in { animation: fade-in 180ms ease-out; }
+
     @keyframes toast-in {
-      from { opacity: 0; transform: translate(-50%, 10px); }
-      to { opacity: 1; transform: translate(-50%, 0); }
+      from { opacity: 0; transform: translate(-50%, 8px); }
+      to   { opacity: 1; transform: translate(-50%, 0); }
     }
-    @media (max-width: 533px) {
+    .toast { animation: toast-in 220ms ease-out; }
+
+    @media (max-width: 430px) {
       html, body { background: #f9f9f9; }
       #root { box-shadow: none; }
     }
@@ -103,27 +169,28 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useMemo, useState, useEffect } = React;
+    const { useState, useEffect, useMemo, useRef } = React;
 
-    const restaurants = [
+    /* ─── Data ─── */
+    const RESTAURANTS = [
       {
         id: 'sweetgreen',
         name: 'Sweetgreen',
         cuisine: 'Healthy • Salads • $$-$$$',
-        tags: ['Healthy', 'Salads', 'Promo', 'Saved'],
+        tags: ['Healthy', 'Salads', 'Promo'],
         rating: 4.8,
         time: 30,
         eta: '25-35 min',
-        fee: '$1.49',
+        fee: 1.49,
         promo: 'Promo',
         favorite: true,
         verified: false,
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDGvdaAb6a0GAP6C2HckiHEWRaTAjpQp8qVtb3CheeARTY_V2Ir-csbmZSPJe-2RZKY86maqcXrtaWTzGHdtfw7UrNPFh_9a_VXGJ9s-cz3be7mWnumyCGsfTvQVO45YkMzYOvLSoeZTamCp_XH8A1t5FWEdCduQXcrPhwEv38jJ6H8s199HCtdHmWEfoCfVnUD0cXYcjXYHUX9LUQMFf2jrMniw44UEFYjZuLt4Nr7zpElP5xARTKDwdyS3ADPCQRoGTPFxy0HCSk',
         menu: [
-          { id: 'sg1', name: 'Superfood Bowl', price: 14.5, desc: 'Quinoa, avocado, egg, roasted sweet potato, lemon dressing' },
-          { id: 'sg2', name: 'Harvest Chicken Salad', price: 13.9, desc: 'Grilled chicken, kale, apple, goat cheese, balsamic' },
-          { id: 'sg3', name: 'Green Goddess Wrap', price: 11.8, desc: 'Spinach tortilla, chickpeas, herbs, cucumber, tahini' }
-        ]
+          { id: 'sg1', name: 'Superfood Bowl', price: 14.50, desc: 'Quinoa, avocado, egg, roasted sweet potato, lemon dressing' },
+          { id: 'sg2', name: 'Harvest Chicken Salad', price: 13.90, desc: 'Grilled chicken, kale, apple, goat cheese, balsamic vinaigrette' },
+          { id: 'sg3', name: 'Green Goddess Wrap', price: 11.80, desc: 'Spinach tortilla, chickpeas, herbs, cucumber, tahini sauce' },
+        ],
       },
       {
         id: 'daily-roast',
@@ -133,16 +200,16 @@
         rating: 4.9,
         time: 20,
         eta: '15-25 min',
-        fee: '$0.99',
+        fee: 0.99,
         promo: null,
         favorite: false,
         verified: true,
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDdcqWN1HZ60fwG3JTgTtEHvSuDK6SUS-bi7ef8k9BR72BGisjz0BXSUOsqG4Yx0qUiU_NIh7q0tWSLluoqOhlCe8SoKYHnFJO9VR-R9EEG3MvhUf8Hc1kjRe2ZR68Nqwrj9eUqYbkSK_VpD4CXTrSyVgoobzW-E-a1G0Q6-kDUlkDKJJkPSDSHsU5Mh7GnbJMob3MwGqyV8xFwzRbdd_GQHcgYV2OW1VIsJIff_A0aZ6G5HbFdaiYNm8VdNKNGDzN_aM-pnL5EQV4',
         menu: [
-          { id: 'dr1', name: 'Avocado Toast Set', price: 12.4, desc: 'Poached egg, microgreens, sourdough, side salad' },
-          { id: 'dr2', name: 'Berry Protein Smoothie', price: 8.0, desc: 'Greek yoghurt, berries, banana, chia seeds' },
-          { id: 'dr3', name: 'Oat Milk Cappuccino', price: 5.2, desc: 'Double shot espresso with steamed oat milk' }
-        ]
+          { id: 'dr1', name: 'Avocado Toast Set', price: 12.40, desc: 'Poached egg, microgreens, sourdough, side salad' },
+          { id: 'dr2', name: 'Berry Protein Smoothie', price: 8.00, desc: 'Greek yoghurt, mixed berries, banana, chia seeds' },
+          { id: 'dr3', name: 'Oat Milk Cappuccino', price: 5.20, desc: 'Double shot espresso with perfectly steamed oat milk' },
+        ],
       },
       {
         id: 'greenhouse',
@@ -152,16 +219,16 @@
         rating: 4.7,
         time: 18,
         eta: '15-20 min',
-        fee: '$1.29',
+        fee: 1.29,
         promo: null,
         favorite: false,
         verified: true,
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA4kkaUiO_hkafE89AnFYxP840cR_m7akUApadkEVVOmviRpj_yNU0gw-DazrFs65cHWQ9n362gLywDUqhupgQjB5NA-Hv6OWuoMRkRhRBGP_VpYaFLiiSjxYIvWqY1-JzDYaYQKk-7XvGt5MzHCrsG2G_0MzEyVC_Wg8ytxvyyeQCAragoG9K31_lSGfJgsPbZcMH4Ky2WTzMr2GKAKQgBZcRqyE7tnaqneU3pkdGGJrkmu-QNDRt4mlBKfbQvG6N-ZnMwVvV2slE',
         menu: [
-          { id: 'gh1', name: 'Lean Green Bowl', price: 12.9, desc: 'Kale, edamame, avocado, pumpkin seeds, sesame ginger' },
-          { id: 'gh2', name: 'Tofu Power Plate', price: 13.2, desc: 'Grilled tofu, brown rice, broccoli, pickled carrot' },
-          { id: 'gh3', name: 'Citrus Kale Salad', price: 10.5, desc: 'Orange, almonds, kale, parmesan, honey mustard' }
-        ]
+          { id: 'gh1', name: 'Lean Green Bowl', price: 12.90, desc: 'Kale, edamame, avocado, pumpkin seeds, sesame ginger' },
+          { id: 'gh2', name: 'Tofu Power Plate', price: 13.20, desc: 'Grilled tofu, brown rice, broccoli, pickled carrot' },
+          { id: 'gh3', name: 'Citrus Kale Salad', price: 10.50, desc: 'Orange segments, almonds, kale, parmesan, honey mustard' },
+        ],
       },
       {
         id: 'juice-press',
@@ -171,36 +238,47 @@
         rating: 4.6,
         time: 12,
         eta: '10-15 min',
-        fee: '$0.79',
+        fee: 0.79,
         promo: 'Free item',
         favorite: false,
         verified: false,
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAL6yZcYLdRep-JBxr5p8oI2zk_DUnUu3pofaqjHS_O7fJfsHo65d9dNT1T9WGJOdfUPUaQ1Qn_MiVDzBiu3rQjHl-xFuudecu7HRX40HWgjRjl-DjJe2_KkZV__Nab7GCm5rIF-06_Za7ZU4PP-ruf6jk0Ue6X10SpQvHL1ewqRcxdpd1fdetWsyzLaIJC_NXniWT1wAne4CvVN2_24Ul-BpyzjVE_FcuUfUTVUximIaC94Sd-0Yx2W4jxq7J0T6m_WgsEsYDnecI',
         menu: [
-          { id: 'jp1', name: 'Berry Blast', price: 8.0, desc: 'Strawberry, blueberry, banana, coconut water' },
-          { id: 'jp2', name: 'Green Reset', price: 7.5, desc: 'Apple, celery, spinach, cucumber, lime' },
-          { id: 'jp3', name: 'Protein Bite Box', price: 6.2, desc: 'Almond butter, oats, cocoa, sea salt' }
-        ]
-      }
+          { id: 'jp1', name: 'Berry Blast', price: 8.00, desc: 'Strawberry, blueberry, banana, coconut water' },
+          { id: 'jp2', name: 'Green Reset', price: 7.50, desc: 'Apple, celery, spinach, cucumber, lime' },
+          { id: 'jp3', name: 'Protein Bite Box', price: 6.20, desc: 'Almond butter, oats, cocoa nibs, sea salt' },
+        ],
+      },
     ];
 
-    const quickReorders = [
-      { id: 'qr1', restaurant: 'Greenhouse Salads', item: 'Superfood Bowl', price: 14.5, eta: '15-20 min', image: restaurants[2].image, menuId: 'sg1' },
-      { id: 'qr2', restaurant: 'Juice Press', item: 'Berry Blast', price: 8, eta: '10-15 min', image: restaurants[3].image, menuId: 'jp1' },
-      { id: 'qr3', restaurant: 'The Daily Roast', item: 'Avocado Toast Set', price: 12.4, eta: '15-25 min', image: restaurants[1].image, menuId: 'dr1' }
+    const QUICK_REORDERS = [
+      { id: 'qr1', restaurant: 'Greenhouse Salads', item: 'Superfood Bowl',   price: 14.50, eta: '15-20 min', image: RESTAURANTS[2].image, menuId: 'gh1' },
+      { id: 'qr2', restaurant: 'Juice Press',       item: 'Berry Blast',      price: 8.00,  eta: '10-15 min', image: RESTAURANTS[3].image, menuId: 'jp1' },
+      { id: 'qr3', restaurant: 'The Daily Roast',   item: 'Avocado Toast Set', price: 12.40, eta: '15-25 min', image: RESTAURANTS[1].image, menuId: 'dr1' },
     ];
 
-    const filterOptions = [
-      { id: 'promo', label: 'Promotions' },
-      { id: 'fast', label: 'Under 30 min' },
-      { id: 'rating', label: 'Rating 4.7+' },
-      { id: 'verified', label: 'Verified reviews' }
+    const FILTER_OPTIONS = [
+      { id: 'promo',    label: 'Promotions',      icon: 'local_offer' },
+      { id: 'fast',     label: 'Under 30 min',    icon: 'bolt' },
+      { id: 'rating',   label: 'Rating 4.7+',     icon: 'star' },
+      { id: 'verified', label: 'Verified Reviews', icon: 'verified' },
     ];
 
-    function Icon({ name, fill = false, className = '', size = 24 }) {
+    const SORT_OPTIONS = [
+      { value: 'recent',  label: 'Recent & Saved' },
+      { value: 'rating',  label: 'Highest Rated' },
+      { value: 'fast',    label: 'Fastest Delivery' },
+      { value: 'fee',     label: 'Lowest Fee' },
+    ];
+
+    /* ─── Helpers ─── */
+    const fmt = (n) => `$${n.toFixed(2)}`;
+
+    /* ─── Icon ─── */
+    function Icon({ name, fill = false, size = 24, className = '' }) {
       return (
         <span
-          className={`material-symbols-outlined ${fill ? 'icon-fill' : ''} ${className}`}
+          className={`material-symbols-outlined select-none ${fill ? 'icon-fill' : ''} ${className}`}
           style={{ fontSize: size }}
           aria-hidden="true"
         >
@@ -209,409 +287,317 @@
       );
     }
 
-    function money(value) {
-      return `$${value.toFixed(2)}`;
+    /* ─── RestaurantCard ─── */
+    function RestaurantCard({ restaurant, isFavorite, onOpen, onToggleFavorite }) {
+      return (
+        <article className="bg-surface-container-lowest rounded-lg border border-surface-variant overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] transition-shadow cursor-pointer flex flex-col group">
+          {/* Image */}
+          <div className="relative h-48 w-full overflow-hidden" onClick={() => onOpen(restaurant)}>
+            <img
+              src={restaurant.image}
+              alt={restaurant.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            {restaurant.promo && (
+              <span className="absolute left-3 top-3 bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface font-label-md text-label-md px-2 py-1 rounded-md shadow-sm">
+                {restaurant.promo}
+              </span>
+            )}
+            <button
+              className="absolute right-3 top-3 w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition hover:bg-white active:scale-95"
+              aria-label={isFavorite ? `Unsave ${restaurant.name}` : `Save ${restaurant.name}`}
+              onClick={(e) => { e.stopPropagation(); onToggleFavorite(restaurant.id); }}
+            >
+              <Icon
+                name="favorite"
+                fill={isFavorite}
+                size={20}
+                className={isFavorite ? 'text-primary-container' : 'text-tertiary'}
+              />
+            </button>
+          </div>
+
+          {/* Info */}
+          <button className="flex flex-col flex-1 p-4 text-left w-full" onClick={() => onOpen(restaurant)}>
+            <div className="flex justify-between items-start mb-1 gap-2">
+              <h3 className="font-headline-sm text-headline-sm text-on-surface line-clamp-1 flex-1">{restaurant.name}</h3>
+              <div className="flex items-center gap-1 bg-surface-container px-1.5 py-0.5 rounded shrink-0">
+                <Icon name="star" fill size={14} className="text-[#FFB800]" />
+                <span className="font-label-md text-label-md text-on-surface">{restaurant.rating}</span>
+              </div>
+            </div>
+            <p className="font-body-sm text-body-sm text-secondary mb-3">{restaurant.cuisine}</p>
+            {restaurant.verified && (
+              <div className="flex items-center gap-1 mb-3 text-primary-container bg-primary-container/10 w-fit px-2 py-0.5 rounded font-label-sm text-label-sm">
+                <Icon name="verified" size={14} />
+                <span>Verified Reviews</span>
+              </div>
+            )}
+            <div className="flex items-center gap-3 mt-auto pt-3 border-t border-surface-variant">
+              <div className="flex items-center gap-1 text-on-surface-variant bg-surface-container-low px-2 py-1 rounded-md">
+                <Icon name="schedule" size={16} />
+                <span className="font-label-md text-label-md">{restaurant.eta}</span>
+              </div>
+              <div className="flex items-center gap-1 text-on-surface-variant bg-surface-container-low px-2 py-1 rounded-md">
+                <Icon name="directions_bike" size={16} />
+                <span className="font-label-md text-label-md">{fmt(restaurant.fee)}</span>
+              </div>
+            </div>
+          </button>
+        </article>
+      );
     }
 
-    function App() {
-      const [query, setQuery] = useState('Healthy');
-      const [favorites, setFavorites] = useState(() => new Set(restaurants.filter((r) => r.favorite).map((r) => r.id)));
-      const [filters, setFilters] = useState(new Set());
-      const [sort, setSort] = useState('recent');
-      const [selected, setSelected] = useState(null);
-      const [showFilters, setShowFilters] = useState(false);
-      const [showCart, setShowCart] = useState(false);
-      const [cart, setCart] = useState([]);
-      const [toast, setToast] = useState('');
-      const [nav, setNav] = useState('home');
+    /* ─── QuickReorderCard ─── */
+    function QuickReorderCard({ item, onReorder }) {
+      return (
+        <button
+          className="snap-start shrink-0 w-[280px] bg-surface-container-lowest rounded-lg border border-surface-variant p-3 flex gap-3 shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-md transition-shadow text-left active:scale-[.99]"
+          onClick={() => onReorder(item)}
+        >
+          <img
+            src={item.image}
+            alt={item.restaurant}
+            className="w-16 h-16 rounded-lg object-cover shrink-0"
+          />
+          <div className="flex-1 min-w-0">
+            <h3 className="font-label-lg text-label-lg text-on-surface truncate">{item.restaurant}</h3>
+            <p className="font-body-sm text-body-sm text-secondary truncate">{item.item} • {fmt(item.price)}</p>
+            <div className="flex items-center gap-1 mt-1 text-primary">
+              <Icon name="schedule" size={16} />
+              <span className="font-label-md text-label-md">{item.eta}</span>
+            </div>
+          </div>
+        </button>
+      );
+    }
 
-      useEffect(() => {
-        if (!toast) return;
-        const timer = window.setTimeout(() => setToast(''), 1800);
-        return () => window.clearTimeout(timer);
-      }, [toast]);
+    /* ─── RestaurantSheet ─── */
+    function RestaurantSheet({ restaurant, isFavorite, onClose, onToggleFavorite, onAdd }) {
+      return (
+        <div
+          className="fade-in fixed inset-0 z-50 flex items-end justify-center"
+          style={{ background: 'rgba(0,0,0,0.40)' }}
+          role="dialog"
+          aria-modal="true"
+          aria-label={restaurant.name}
+          onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+        >
+          <div className="sheet w-full max-w-[430px] max-h-[88dvh] flex flex-col rounded-t-xl bg-surface-container-lowest shadow-[0_-8px_40px_rgba(0,0,0,0.16)] overflow-hidden">
+            {/* Hero */}
+            <div className="relative h-52 shrink-0">
+              <img src={restaurant.image} alt={restaurant.name} className="w-full h-full object-cover" />
+              <button
+                className="absolute left-4 top-4 w-9 h-9 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition active:scale-90"
+                aria-label="Close"
+                onClick={onClose}
+              >
+                <Icon name="close" size={22} />
+              </button>
+              <button
+                className="absolute right-4 top-4 w-9 h-9 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition active:scale-90"
+                aria-label={isFavorite ? 'Unsave' : 'Save'}
+                onClick={onToggleFavorite}
+              >
+                <Icon name="favorite" fill={isFavorite} size={22} className={isFavorite ? 'text-primary-container' : 'text-tertiary'} />
+              </button>
+            </div>
 
-      const visibleRestaurants = useMemo(() => {
-        const needle = query.trim().toLowerCase();
-        let list = restaurants.filter((restaurant) => {
-          const searchable = `${restaurant.name} ${restaurant.cuisine} ${restaurant.tags.join(' ')}`.toLowerCase();
-          if (needle && !searchable.includes(needle)) return false;
-          if (filters.has('promo') && !restaurant.promo) return false;
-          if (filters.has('fast') && restaurant.time > 30) return false;
-          if (filters.has('rating') && restaurant.rating < 4.7) return false;
-          if (filters.has('verified') && !restaurant.verified) return false;
-          return true;
-        });
+            {/* Content */}
+            <div className="overflow-y-auto flex-1 px-4 py-5 pb-8">
+              {/* Header */}
+              <div className="flex items-start justify-between gap-3 mb-1">
+                <div className="flex-1 min-w-0">
+                  <h2 className="font-display-md text-display-md text-on-surface">{restaurant.name}</h2>
+                  <p className="font-body-sm text-body-sm text-secondary mt-1">{restaurant.cuisine}</p>
+                </div>
+                <div className="flex items-center gap-1 bg-surface-container px-2 py-1 rounded shrink-0 mt-1">
+                  <Icon name="star" fill size={16} className="text-[#FFB800]" />
+                  <span className="font-label-lg text-label-lg text-on-surface">{restaurant.rating}</span>
+                </div>
+              </div>
 
-        if (sort === 'rating') list = [...list].sort((a, b) => b.rating - a.rating);
-        if (sort === 'fast') list = [...list].sort((a, b) => a.time - b.time);
-        if (sort === 'fee') list = [...list].sort((a, b) => Number(a.fee.replace(/[$]/g, '')) - Number(b.fee.replace(/[$]/g, '')));
-        return list;
-      }, [query, filters, sort]);
+              {/* Meta chips */}
+              <div className="flex flex-wrap gap-2 mt-3 mb-5">
+                <span className="flex items-center gap-1 bg-surface-container-low px-3 py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant">
+                  <Icon name="schedule" size={15} />
+                  {restaurant.eta}
+                </span>
+                <span className="flex items-center gap-1 bg-surface-container-low px-3 py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant">
+                  <Icon name="directions_bike" size={15} />
+                  {fmt(restaurant.fee)} delivery
+                </span>
+                {restaurant.promo && (
+                  <span className="flex items-center gap-1 bg-primary-container/10 px-3 py-1.5 rounded-full font-label-md text-label-md text-primary-container">
+                    <Icon name="local_offer" size={15} />
+                    {restaurant.promo}
+                  </span>
+                )}
+                {restaurant.verified && (
+                  <span className="flex items-center gap-1 bg-primary-container/10 px-3 py-1.5 rounded-full font-label-md text-label-md text-primary-container">
+                    <Icon name="verified" size={15} />
+                    Verified Reviews
+                  </span>
+                )}
+              </div>
 
-      const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
-      const cartTotal = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
+              {/* Menu */}
+              <h3 className="font-headline-sm text-headline-sm text-on-surface mb-3">Popular items</h3>
+              <div className="space-y-3">
+                {restaurant.menu.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between gap-4 rounded-lg border border-surface-variant bg-surface-container-lowest p-4"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-label-lg text-label-lg text-on-surface">{item.name}</h4>
+                      <p className="font-body-sm text-body-sm text-secondary mt-1 line-clamp-2">{item.desc}</p>
+                      <p className="font-label-lg text-label-lg text-on-surface mt-2">{fmt(item.price)}</p>
+                    </div>
+                    <button
+                      className="shrink-0 w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-sm transition active:scale-90 hover:bg-primary/90"
+                      aria-label={`Add ${item.name}`}
+                      onClick={() => onAdd({ ...item, restaurant: restaurant.name })}
+                    >
+                      <Icon name="add" size={22} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
 
-      function addToCart(item, source = 'Added to basket') {
-        setCart((current) => {
-          const found = current.find((cartItem) => cartItem.id === item.id);
-          if (found) return current.map((cartItem) => cartItem.id === item.id ? { ...cartItem, qty: cartItem.qty + 1 } : cartItem);
-          return [...current, { ...item, qty: 1 }];
-        });
-        setToast(source);
-      }
+    /* ─── FilterSheet ─── */
+    function FilterSheet({ activeFilters, onToggle, onClear, onApply, onClose }) {
+      const [local, setLocal] = useState(new Set(activeFilters));
 
-      function updateCart(id, delta) {
-        setCart((current) => current
-          .map((item) => item.id === id ? { ...item, qty: item.qty + delta } : item)
-          .filter((item) => item.qty > 0));
-      }
-
-      function toggleFavorite(id) {
-        setFavorites((current) => {
-          const next = new Set(current);
-          if (next.has(id)) {
-            next.delete(id);
-            setToast('Removed from saved');
-          } else {
-            next.add(id);
-            setToast('Saved for later');
-          }
-          return next;
-        });
-      }
-
-      function toggleFilter(id) {
-        setFilters((current) => {
-          const next = new Set(current);
+      function toggle(id) {
+        setLocal((prev) => {
+          const next = new Set(prev);
           next.has(id) ? next.delete(id) : next.add(id);
           return next;
         });
       }
 
-      const resultLabel = filters.size || query.toLowerCase() !== 'healthy' ? `${visibleRestaurants.length} Results` : '54 Results';
-
       return (
-        <div className="min-h-screen bg-surface pb-24">
-          <header className="fixed left-1/2 top-0 z-40 flex h-[88px] w-full max-w-[533px] -translate-x-1/2 items-center justify-between border-b border-surface-container-high bg-surface-container-lowest px-6 shadow-sm">
-            <button className="flex h-11 w-11 items-center justify-center rounded-full transition hover:bg-surface-container-low" aria-label="Go back" onClick={() => setToast('Back to Grab home')}>
-              <Icon name="arrow_back" size={31} />
-            </button>
-            <h1 className="text-[28px] font-bold leading-9 tracking-normal">Search Results</h1>
-            <button className="relative flex h-11 w-11 items-center justify-center rounded-full text-primary-container transition hover:bg-surface-container-low" aria-label="Open basket" onClick={() => setShowCart(true)}>
-              <Icon name="shopping_basket" fill size={31} />
-              {cartCount > 0 && <span className="absolute right-0 top-0 grid h-5 min-w-5 place-items-center rounded-full bg-on-surface px-1 text-[11px] font-bold text-white">{cartCount}</span>}
-            </button>
-          </header>
-
-          <main className="px-[22px] pt-[110px]">
-            <section className="mb-8 flex items-center gap-3">
-              <label className="relative block flex-1">
-                <Icon name="search" size={31} className="absolute left-4 top-1/2 -translate-y-1/2 text-tertiary" />
-                <input
-                  className="h-[68px] w-full rounded-xl border border-surface-dim bg-white pl-14 pr-12 text-[23px] text-on-surface shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Burgers, sushi, pizza..."
-                />
-                {query && (
-                  <button className="absolute right-4 top-1/2 -translate-y-1/2 text-tertiary" aria-label="Clear search" onClick={() => setQuery('')}>
-                    <Icon name="close" size={31} />
-                  </button>
-                )}
-              </label>
+        <div
+          className="fade-in fixed inset-0 z-50 flex items-end justify-center"
+          style={{ background: 'rgba(0,0,0,0.40)' }}
+          onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+        >
+          <div className="sheet safe-bottom w-full max-w-[430px] rounded-t-xl bg-surface-container-lowest shadow-[0_-8px_40px_rgba(0,0,0,0.16)] p-5">
+            {/* Title row */}
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="font-headline-sm text-headline-sm text-on-surface">Filters</h2>
               <button
-                className={`grid h-[68px] w-[66px] place-items-center rounded-xl border shadow-sm transition ${filters.size ? 'border-primary bg-primary text-white' : 'border-surface-dim bg-white text-on-surface hover:bg-surface-container-low'}`}
-                aria-label="Open filters"
-                onClick={() => setShowFilters(true)}
+                className="w-9 h-9 rounded-full bg-surface-container-low flex items-center justify-center transition active:scale-90"
+                aria-label="Close filters"
+                onClick={onClose}
               >
-                <Icon name="tune" size={31} />
+                <Icon name="close" size={22} />
               </button>
-            </section>
+            </div>
 
-            <section className="mb-14">
-              <h2 className="mb-5 text-[20px] font-semibold uppercase leading-6 tracking-[0.1em] text-on-surface-variant">Quick Reorder</h2>
-              <div className="hide-scrollbar -mx-[22px] flex snap-x gap-6 overflow-x-auto px-[22px] pb-1">
-                {quickReorders.map((item) => (
+            {/* Filter grid */}
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              {FILTER_OPTIONS.map((opt) => {
+                const active = local.has(opt.id);
+                return (
                   <button
-                    key={item.id}
-                    className="flex w-[382px] shrink-0 snap-start items-center gap-4 rounded-2xl border border-surface-dim bg-white p-4 text-left shadow-ambient transition active:scale-[.99]"
-                    onClick={() => addToCart({ id: item.menuId, restaurant: item.restaurant, name: item.item, price: item.price }, `${item.item} reordered`)}
+                    key={opt.id}
+                    className={`flex items-center gap-2 rounded-lg border px-4 py-4 text-left font-label-lg text-label-lg transition active:scale-95 ${
+                      active
+                        ? 'border-primary bg-primary text-on-primary'
+                        : 'border-surface-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container-low'
+                    }`}
+                    onClick={() => toggle(opt.id)}
                   >
-                    <img className="h-[88px] w-[88px] rounded-xl object-cover" src={item.image} alt="" />
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-[21px] font-bold leading-7">{item.restaurant}</span>
-                      <span className="block truncate text-[18px] leading-6 text-secondary">{item.item} • {money(item.price)}</span>
-                      <span className="mt-2 flex items-center gap-2 text-[17px] font-medium text-primary">
-                        <Icon name="schedule" fill size={18} />
-                        {item.eta}
-                      </span>
-                    </span>
+                    <Icon name={opt.icon} fill={active} size={18} />
+                    {opt.label}
                   </button>
-                ))}
-              </div>
-            </section>
+                );
+              })}
+            </div>
 
-            <section className="mb-6 flex items-center justify-between gap-4">
-              <h2 className="text-[34px] font-black leading-10 tracking-normal">{resultLabel}</h2>
-              <label className="relative">
-                <select
-                  className="h-12 appearance-none rounded-full border border-surface-dim bg-white py-0 pl-5 pr-10 text-[16px] font-medium text-on-surface shadow-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                  value={sort}
-                  onChange={(event) => setSort(event.target.value)}
-                  aria-label="Sort results"
-                >
-                  <option value="recent">Recent & Saved</option>
-                  <option value="rating">Highest Rated</option>
-                  <option value="fast">Fastest Delivery</option>
-                  <option value="fee">Lowest Fee</option>
-                </select>
-                <Icon name="arrow_drop_down" size={20} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2" />
-              </label>
-            </section>
-
-            {filters.size > 0 && (
-              <div className="mb-5 flex flex-wrap gap-2">
-                {[...filters].map((id) => {
-                  const option = filterOptions.find((item) => item.id === id);
-                  return (
-                    <button key={id} className="flex items-center gap-1 rounded-full bg-primary px-3 py-2 text-sm font-semibold text-white" onClick={() => toggleFilter(id)}>
-                      {option.label}
-                      <Icon name="close" size={16} />
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-
-            <section className="grid grid-cols-1 gap-9">
-              {visibleRestaurants.map((restaurant) => (
-                <article key={restaurant.id} className="overflow-hidden rounded-2xl border border-surface-dim bg-white shadow-ambient">
-                  <div className="relative h-[260px] overflow-hidden bg-surface-container">
-                    <button className="block h-full w-full text-left" onClick={() => setSelected(restaurant)} aria-label={`Open ${restaurant.name}`}>
-                      <img className="h-full w-full object-cover transition duration-500 hover:scale-105" src={restaurant.image} alt="" />
-                    </button>
-                    {restaurant.promo && <span className="absolute left-4 top-4 rounded-lg bg-white/95 px-3 py-2 text-[18px] font-medium shadow-sm">{restaurant.promo}</span>}
-                    <button
-                      className="absolute right-4 top-4 grid h-12 w-12 place-items-center rounded-full bg-white/95 text-primary-container shadow-sm transition hover:scale-105"
-                      aria-label={`Save ${restaurant.name}`}
-                      onClick={() => toggleFavorite(restaurant.id)}
-                    >
-                      <Icon name="favorite" fill={favorites.has(restaurant.id)} size={30} className={favorites.has(restaurant.id) ? 'text-primary-container' : 'text-secondary'} />
-                    </button>
-                  </div>
-                  <button className="block w-full px-6 pb-5 pt-6 text-left" onClick={() => setSelected(restaurant)}>
-                      <div className="mb-2 flex items-start justify-between gap-4">
-                        <h3 className="min-w-0 text-[30px] font-bold leading-9">{restaurant.name}</h3>
-                        <span className="mt-1 flex shrink-0 items-center gap-2 rounded-lg bg-surface-container-low px-2 py-1 text-[17px]">
-                          <Icon name="star" fill size={18} className="text-[#ffb800]" />
-                          {restaurant.rating}
-                        </span>
-                      </div>
-                      <p className="mb-5 text-[20px] leading-7 text-secondary">{restaurant.cuisine}</p>
-                      {restaurant.verified && (
-                        <span className="mb-5 inline-flex items-center gap-2 rounded-lg bg-primary-container/10 px-3 py-2 text-[14px] font-bold text-primary-container">
-                          <Icon name="verified" fill size={17} />
-                          Verified Reviews
-                        </span>
-                      )}
-                      <div className="flex items-center gap-4 border-t border-surface-dim pt-4">
-                        <span className="flex items-center gap-2 rounded-lg bg-surface-container-low px-3 py-2 text-[17px] font-medium text-on-surface-variant">
-                          <Icon name="schedule" fill size={19} />
-                          {restaurant.eta}
-                        </span>
-                        <span className="flex items-center gap-2 rounded-lg bg-surface-container-low px-3 py-2 text-[17px] font-medium text-on-surface-variant">
-                          <Icon name="directions_bike" size={19} />
-                          {restaurant.fee}
-                        </span>
-                      </div>
-                  </button>
-                </article>
-              ))}
-            </section>
-
-            {visibleRestaurants.length === 0 && (
-              <section className="rounded-2xl border border-surface-dim bg-white p-8 text-center shadow-ambient">
-                <Icon name="search_off" size={42} className="mx-auto mb-3 text-tertiary" />
-                <h3 className="text-xl font-bold">No matching restaurants</h3>
-                <p className="mt-2 text-secondary">Try clearing a filter or searching for salads, cafe, juice, or breakfast.</p>
-              </section>
-            )}
-          </main>
-
-          <nav className="safe-bottom fixed bottom-0 left-1/2 z-40 flex w-full max-w-[533px] -translate-x-1/2 items-start justify-around border-t border-surface-container-high bg-white px-4 pt-4 shadow-[0_-4px_12px_rgba(0,0,0,.04)]">
-            {[
-              ['home', 'home', 'Home'],
-              ['activity', 'receipt_long', 'Activity'],
-              ['offers', 'local_offer', 'Offers'],
-              ['account', 'person', 'Account']
-            ].map(([id, icon, label]) => (
+            {/* Actions */}
+            <div className="flex gap-3">
               <button
-                key={id}
-                className={`flex min-w-[68px] flex-col items-center gap-1 text-[14px] font-medium transition ${nav === id ? 'text-primary-container' : 'text-on-surface'}`}
-                onClick={() => {
-                  setNav(id);
-                  setToast(`${label} selected`);
-                }}
+                className="flex-1 h-12 rounded-lg border border-surface-variant font-label-lg text-label-lg text-on-surface hover:bg-surface-container-low transition"
+                onClick={() => { setLocal(new Set()); }}
               >
-                <Icon name={icon} fill={nav === id} size={29} />
-                {label}
+                Clear all
               </button>
-            ))}
-          </nav>
-
-          {selected && (
-            <RestaurantSheet
-              restaurant={selected}
-              favorite={favorites.has(selected.id)}
-              onClose={() => setSelected(null)}
-              onFavorite={() => toggleFavorite(selected.id)}
-              onAdd={addToCart}
-            />
-          )}
-
-          {showFilters && (
-            <FilterSheet
-              filters={filters}
-              onToggle={toggleFilter}
-              onClose={() => setShowFilters(false)}
-              onClear={() => setFilters(new Set())}
-            />
-          )}
-
-          {showCart && (
-            <CartSheet
-              cart={cart}
-              total={cartTotal}
-              onClose={() => setShowCart(false)}
-              onUpdate={updateCart}
-              onCheckout={() => {
-                setShowCart(false);
-                setToast(cart.length ? 'Order ready for checkout' : 'Basket is empty');
-              }}
-            />
-          )}
-
-          {toast && (
-            <div className="toast fixed bottom-28 left-1/2 z-50 max-w-[calc(100%-48px)] -translate-x-1/2 rounded-full bg-on-surface px-5 py-3 text-center text-sm font-semibold text-white shadow-floating">
-              {toast}
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    function RestaurantSheet({ restaurant, favorite, onClose, onFavorite, onAdd }) {
-      return (
-        <div className="fade-in fixed inset-0 z-50 flex items-end justify-center bg-black/35 px-0" role="dialog" aria-modal="true">
-          <div className="sheet max-h-[88vh] w-full max-w-[533px] overflow-hidden rounded-t-3xl bg-white shadow-floating">
-            <div className="relative h-56">
-              <img className="h-full w-full object-cover" src={restaurant.image} alt="" />
-              <button className="absolute left-4 top-4 grid h-11 w-11 place-items-center rounded-full bg-white/95 shadow-sm" aria-label="Close restaurant" onClick={onClose}>
-                <Icon name="close" size={26} />
+              <button
+                className="flex-1 h-12 rounded-lg bg-primary font-label-lg text-label-lg text-on-primary hover:bg-primary/90 transition active:scale-95"
+                onClick={() => { onApply(local); onClose(); }}
+              >
+                Show results
               </button>
-              <button className="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full bg-white/95 text-primary-container shadow-sm" aria-label="Save restaurant" onClick={onFavorite}>
-                <Icon name="favorite" fill={favorite} size={27} className={favorite ? 'text-primary-container' : 'text-secondary'} />
-              </button>
-            </div>
-            <div className="max-h-[calc(88vh-224px)] overflow-y-auto px-6 pb-8 pt-5">
-              <div className="mb-5 flex items-start justify-between gap-4">
-                <div>
-                  <h2 className="text-[28px] font-bold leading-9">{restaurant.name}</h2>
-                  <p className="mt-1 text-[16px] text-secondary">{restaurant.cuisine}</p>
-                </div>
-                <span className="flex shrink-0 items-center gap-1 rounded-lg bg-surface-container-low px-2 py-1 text-sm font-semibold">
-                  <Icon name="star" fill size={17} className="text-[#ffb800]" />
-                  {restaurant.rating}
-                </span>
-              </div>
-              <div className="mb-6 flex gap-3">
-                <span className="rounded-lg bg-surface-container-low px-3 py-2 text-sm font-semibold">{restaurant.eta}</span>
-                <span className="rounded-lg bg-surface-container-low px-3 py-2 text-sm font-semibold">{restaurant.fee} delivery</span>
-                {restaurant.promo && <span className="rounded-lg bg-primary-container/10 px-3 py-2 text-sm font-bold text-primary-container">{restaurant.promo}</span>}
-              </div>
-              <h3 className="mb-3 text-lg font-bold">Popular items</h3>
-              <div className="space-y-3">
-                {restaurant.menu.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between gap-4 rounded-xl border border-surface-container-high bg-white p-4">
-                    <div className="min-w-0">
-                      <h4 className="text-base font-bold">{item.name}</h4>
-                      <p className="mt-1 line-clamp-2 text-sm leading-5 text-secondary">{item.desc}</p>
-                      <p className="mt-2 text-sm font-bold">{money(item.price)}</p>
-                    </div>
-                    <button
-                      className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary text-white shadow-sm transition active:scale-95"
-                      aria-label={`Add ${item.name}`}
-                      onClick={() => onAdd({ ...item, restaurant: restaurant.name }, `${item.name} added`)}
-                    >
-                      <Icon name="add" size={23} />
-                    </button>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         </div>
       );
     }
 
-    function FilterSheet({ filters, onToggle, onClose, onClear }) {
-      return (
-        <div className="fade-in fixed inset-0 z-50 flex items-end justify-center bg-black/35" role="dialog" aria-modal="true">
-          <div className="sheet w-full max-w-[533px] rounded-t-3xl bg-white p-6 shadow-floating">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Filters</h2>
-              <button className="grid h-10 w-10 place-items-center rounded-full bg-surface-container-low" aria-label="Close filters" onClick={onClose}>
-                <Icon name="close" size={24} />
-              </button>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              {filterOptions.map((option) => (
-                <button
-                  key={option.id}
-                  className={`rounded-xl border px-4 py-4 text-left text-sm font-bold transition ${filters.has(option.id) ? 'border-primary bg-primary text-white' : 'border-surface-dim bg-white text-on-surface'}`}
-                  onClick={() => onToggle(option.id)}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-            <div className="mt-6 flex gap-3">
-              <button className="h-12 flex-1 rounded-xl border border-surface-dim font-bold" onClick={onClear}>Clear</button>
-              <button className="h-12 flex-1 rounded-xl bg-primary font-bold text-white" onClick={onClose}>Show results</button>
-            </div>
-          </div>
-        </div>
-      );
-    }
+    /* ─── CartSheet ─── */
+    function CartSheet({ cart, onClose, onUpdate, onCheckout }) {
+      const total = cart.reduce((s, i) => s + i.qty * i.price, 0);
+      const count = cart.reduce((s, i) => s + i.qty, 0);
 
-    function CartSheet({ cart, total, onClose, onUpdate, onCheckout }) {
       return (
-        <div className="fade-in fixed inset-0 z-50 flex items-end justify-center bg-black/35" role="dialog" aria-modal="true">
-          <div className="sheet safe-bottom w-full max-w-[533px] rounded-t-3xl bg-white p-6 shadow-floating">
-            <div className="mb-5 flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Basket</h2>
-              <button className="grid h-10 w-10 place-items-center rounded-full bg-surface-container-low" aria-label="Close basket" onClick={onClose}>
-                <Icon name="close" size={24} />
+        <div
+          className="fade-in fixed inset-0 z-50 flex items-end justify-center"
+          style={{ background: 'rgba(0,0,0,0.40)' }}
+          onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+        >
+          <div className="sheet safe-bottom w-full max-w-[430px] rounded-t-xl bg-surface-container-lowest shadow-[0_-8px_40px_rgba(0,0,0,0.16)] p-5">
+            {/* Title */}
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h2 className="font-headline-sm text-headline-sm text-on-surface">Basket</h2>
+                {count > 0 && <p className="font-body-sm text-body-sm text-secondary mt-0.5">{count} item{count !== 1 ? 's' : ''}</p>}
+              </div>
+              <button
+                className="w-9 h-9 rounded-full bg-surface-container-low flex items-center justify-center transition active:scale-90"
+                aria-label="Close basket"
+                onClick={onClose}
+              >
+                <Icon name="close" size={22} />
               </button>
             </div>
+
+            {/* Items */}
             {cart.length === 0 ? (
-              <div className="rounded-xl bg-surface-container-low p-6 text-center text-secondary">Your basket is empty.</div>
+              <div className="rounded-lg bg-surface-container-low p-6 text-center">
+                <Icon name="shopping_basket" size={40} className="text-tertiary mx-auto mb-2" />
+                <p className="font-body-sm text-body-sm text-secondary">Your basket is empty.</p>
+              </div>
             ) : (
-              <div className="max-h-[48vh] space-y-3 overflow-y-auto">
+              <div className="max-h-[44dvh] overflow-y-auto space-y-3 mb-5">
                 {cart.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between gap-3 rounded-xl border border-surface-container-high p-4">
-                    <div className="min-w-0">
-                      <h3 className="font-bold">{item.name}</h3>
-                      <p className="truncate text-sm text-secondary">{item.restaurant}</p>
-                      <p className="mt-1 text-sm font-bold">{money(item.price * item.qty)}</p>
+                  <div key={item.id} className="flex items-center gap-3 rounded-lg border border-surface-variant p-4">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-label-lg text-label-lg text-on-surface truncate">{item.name}</h3>
+                      <p className="font-body-sm text-body-sm text-secondary truncate">{item.restaurant}</p>
+                      <p className="font-label-lg text-label-lg text-on-surface mt-1">{fmt(item.price * item.qty)}</p>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <button className="grid h-8 w-8 place-items-center rounded-full bg-surface-container-low" aria-label={`Remove one ${item.name}`} onClick={() => onUpdate(item.id, -1)}>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        className="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center transition active:scale-90"
+                        aria-label={`Remove one ${item.name}`}
+                        onClick={() => onUpdate(item.id, -1)}
+                      >
                         <Icon name="remove" size={18} />
                       </button>
-                      <span className="w-5 text-center font-bold">{item.qty}</span>
-                      <button className="grid h-8 w-8 place-items-center rounded-full bg-primary text-white" aria-label={`Add one ${item.name}`} onClick={() => onUpdate(item.id, 1)}>
+                      <span className="w-5 text-center font-label-lg text-label-lg">{item.qty}</span>
+                      <button
+                        className="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center transition active:scale-90"
+                        aria-label={`Add one ${item.name}`}
+                        onClick={() => onUpdate(item.id, 1)}
+                      >
                         <Icon name="add" size={18} />
                       </button>
                     </div>
@@ -619,11 +605,338 @@
                 ))}
               </div>
             )}
-            <button className="mt-6 flex h-14 w-full items-center justify-between rounded-xl bg-primary px-5 text-base font-bold text-white" onClick={onCheckout}>
+
+            <button
+              className="flex items-center justify-between w-full h-14 rounded-lg bg-primary text-on-primary px-5 font-label-lg text-label-lg transition hover:bg-primary/90 active:scale-[.99]"
+              onClick={onCheckout}
+            >
               <span>Checkout</span>
-              <span>{money(total)}</span>
+              <span>{fmt(total)}</span>
             </button>
           </div>
+        </div>
+      );
+    }
+
+    /* ─── SortDropdown ─── */
+    function SortDropdown({ value, onChange }) {
+      const [open, setOpen] = useState(false);
+      const ref = useRef(null);
+
+      useEffect(() => {
+        function handler(e) {
+          if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+        }
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+      }, []);
+
+      const current = SORT_OPTIONS.find((o) => o.value === value);
+
+      return (
+        <div className="relative" ref={ref}>
+          <button
+            className="flex items-center gap-1 px-3 py-1.5 bg-surface-container-lowest border border-surface-variant rounded-full font-label-md text-label-md text-on-surface hover:bg-surface-container-low transition"
+            onClick={() => setOpen((o) => !o)}
+            aria-haspopup="listbox"
+            aria-expanded={open}
+          >
+            <span>{current.label}</span>
+            <Icon name="arrow_drop_down" size={16} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
+          </button>
+          {open && (
+            <div className="absolute right-0 top-full mt-1 z-10 w-44 bg-surface-container-lowest rounded-lg border border-surface-variant shadow-[0_8px_24px_rgba(0,0,0,0.10)] overflow-hidden fade-in">
+              {SORT_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  className={`w-full text-left px-4 py-3 font-body-sm text-body-sm transition ${
+                    opt.value === value
+                      ? 'bg-primary/5 text-primary font-semibold'
+                      : 'text-on-surface hover:bg-surface-container-low'
+                  }`}
+                  onClick={() => { onChange(opt.value); setOpen(false); }}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    /* ─── App ─── */
+    function App() {
+      const [query, setQuery] = useState('Healthy');
+      const [favorites, setFavorites] = useState(() => new Set(RESTAURANTS.filter((r) => r.favorite).map((r) => r.id)));
+      const [filters, setFilters] = useState(new Set());
+      const [sort, setSort] = useState('recent');
+      const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+      const [showFilters, setShowFilters] = useState(false);
+      const [showCart, setShowCart] = useState(false);
+      const [cart, setCart] = useState([]);
+      const [toast, setToast] = useState('');
+      const [activeNav, setActiveNav] = useState('home');
+
+      /* Auto-dismiss toast */
+      useEffect(() => {
+        if (!toast) return;
+        const t = setTimeout(() => setToast(''), 2000);
+        return () => clearTimeout(t);
+      }, [toast]);
+
+      /* Filtered & sorted restaurants */
+      const visible = useMemo(() => {
+        const q = query.trim().toLowerCase();
+        let list = RESTAURANTS.filter((r) => {
+          const hay = `${r.name} ${r.cuisine} ${r.tags.join(' ')}`.toLowerCase();
+          if (q && !hay.includes(q)) return false;
+          if (filters.has('promo') && !r.promo) return false;
+          if (filters.has('fast') && r.time >= 30) return false;
+          if (filters.has('rating') && r.rating < 4.7) return false;
+          if (filters.has('verified') && !r.verified) return false;
+          return true;
+        });
+        if (sort === 'rating') list = [...list].sort((a, b) => b.rating - a.rating);
+        if (sort === 'fast')   list = [...list].sort((a, b) => a.time - b.time);
+        if (sort === 'fee')    list = [...list].sort((a, b) => a.fee - b.fee);
+        return list;
+      }, [query, filters, sort]);
+
+      const cartCount = cart.reduce((s, i) => s + i.qty, 0);
+
+      function addToCart(item, msg) {
+        setCart((prev) => {
+          const found = prev.find((c) => c.id === item.id);
+          return found
+            ? prev.map((c) => c.id === item.id ? { ...c, qty: c.qty + 1 } : c)
+            : [...prev, { ...item, qty: 1 }];
+        });
+        setToast(msg || `${item.name} added`);
+      }
+
+      function updateCart(id, delta) {
+        setCart((prev) => prev.map((c) => c.id === id ? { ...c, qty: c.qty + delta } : c).filter((c) => c.qty > 0));
+      }
+
+      function toggleFavorite(id) {
+        setFavorites((prev) => {
+          const next = new Set(prev);
+          if (next.has(id)) { next.delete(id); setToast('Removed from saved'); }
+          else { next.add(id); setToast('Saved for later'); }
+          return next;
+        });
+      }
+
+      const resultCount = filters.size === 0 && query.toLowerCase() === 'healthy' ? 54 : visible.length;
+
+      return (
+        <div className="min-h-screen bg-surface pb-24">
+
+          {/* ── Top App Bar ── */}
+          <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-40 flex items-center justify-between px-4 h-16 bg-surface-container-lowest border-b border-surface-variant shadow-sm safe-top">
+            <button
+              className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-low active:scale-95 transition"
+              aria-label="Go back"
+              onClick={() => setToast('Going back…')}
+            >
+              <Icon name="arrow_back" size={24} />
+            </button>
+            <h1 className="font-headline-sm text-headline-sm text-on-surface">Search Results</h1>
+            <button
+              className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-low active:scale-95 transition text-primary-container"
+              aria-label="Open basket"
+              onClick={() => setShowCart(true)}
+            >
+              <Icon name="shopping_basket" fill size={24} />
+              {cartCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-on-surface text-surface-container-lowest text-[10px] font-bold rounded-full flex items-center justify-center px-1 leading-none">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+          </header>
+
+          {/* ── Main content ── */}
+          <main className="pt-20 pb-6 px-container-margin">
+
+            {/* Search + Filter */}
+            <div className="flex gap-2 mb-lg items-center mt-2">
+              <div className="relative flex-1">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-tertiary" style={{ fontSize: 22 }}>search</span>
+                <input
+                  className="w-full pl-10 pr-10 py-3 bg-surface-container-lowest border border-surface-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Burgers, sushi, pizza…"
+                  aria-label="Search food"
+                />
+                {query && (
+                  <button
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-tertiary hover:text-on-surface transition"
+                    aria-label="Clear search"
+                    onClick={() => setQuery('')}
+                  >
+                    <Icon name="close" size={20} />
+                  </button>
+                )}
+              </div>
+              <button
+                className={`flex items-center justify-center w-12 h-12 rounded-lg border transition active:scale-95 ${
+                  filters.size
+                    ? 'bg-primary border-primary text-on-primary'
+                    : 'bg-surface-container-lowest border-surface-variant text-on-surface hover:bg-surface-container-low'
+                }`}
+                aria-label="Open filters"
+                onClick={() => setShowFilters(true)}
+              >
+                <Icon name="tune" size={22} />
+              </button>
+            </div>
+
+            {/* Quick Reorder */}
+            <section className="mb-xl">
+              <h2 className="font-label-lg text-label-lg text-on-surface-variant mb-md uppercase tracking-wider">Quick Reorder</h2>
+              <div className="flex overflow-x-auto gap-4 pb-2 snap-x hide-scrollbar -mx-container-margin px-container-margin">
+                {QUICK_REORDERS.map((item) => (
+                  <QuickReorderCard
+                    key={item.id}
+                    item={item}
+                    onReorder={(r) => addToCart({ id: r.menuId, restaurant: r.restaurant, name: r.item, price: r.price }, `${r.item} reordered`)}
+                  />
+                ))}
+              </div>
+            </section>
+
+            {/* Results header */}
+            <div className="flex justify-between items-center mb-md">
+              <h2 className="font-display-md text-display-md text-on-surface">{resultCount} Results</h2>
+              <SortDropdown value={sort} onChange={setSort} />
+            </div>
+
+            {/* Active filter chips */}
+            {filters.size > 0 && (
+              <div className="flex flex-wrap gap-2 mb-md">
+                {[...filters].map((id) => {
+                  const opt = FILTER_OPTIONS.find((o) => o.id === id);
+                  return (
+                    <button
+                      key={id}
+                      className="flex items-center gap-1.5 bg-primary text-on-primary px-3 py-1.5 rounded-full font-label-md text-label-md transition active:scale-95"
+                      onClick={() => {
+                        setFilters((prev) => {
+                          const next = new Set(prev);
+                          next.delete(id);
+                          return next;
+                        });
+                      }}
+                    >
+                      {opt.label}
+                      <Icon name="close" size={14} />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Restaurant cards */}
+            {visible.length > 0 ? (
+              <section className="grid grid-cols-1 gap-lg">
+                {visible.map((r) => (
+                  <RestaurantCard
+                    key={r.id}
+                    restaurant={r}
+                    isFavorite={favorites.has(r.id)}
+                    onOpen={setSelectedRestaurant}
+                    onToggleFavorite={toggleFavorite}
+                  />
+                ))}
+              </section>
+            ) : (
+              <div className="rounded-lg border border-surface-variant bg-surface-container-lowest p-8 text-center shadow-[0_4px_12px_rgba(0,0,0,0.04)]">
+                <Icon name="search_off" size={40} className="text-tertiary mx-auto mb-3" />
+                <h3 className="font-headline-sm text-headline-sm text-on-surface mb-1">No results found</h3>
+                <p className="font-body-sm text-body-sm text-secondary">Try clearing a filter or adjusting your search.</p>
+              </div>
+            )}
+          </main>
+
+          {/* ── Bottom Nav ── */}
+          <nav className="safe-bottom fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-40 flex justify-around items-start bg-surface-container-lowest border-t border-surface-variant shadow-[0_-4px_12px_rgba(0,0,0,0.04)] pt-2">
+            {[
+              { id: 'home',     icon: 'home',         label: 'Home' },
+              { id: 'activity', icon: 'receipt_long',  label: 'Activity' },
+              { id: 'offers',   icon: 'local_offer',   label: 'Offers' },
+              { id: 'account',  icon: 'person',        label: 'Account' },
+            ].map(({ id, icon, label }) => {
+              const active = activeNav === id;
+              return (
+                <button
+                  key={id}
+                  className={`flex flex-col items-center pb-1 min-w-[56px] transition active:scale-90 ${active ? 'text-primary-container' : 'text-on-surface-variant'}`}
+                  onClick={() => { setActiveNav(id); }}
+                >
+                  <Icon name={icon} fill={active} size={26} />
+                  <span className="font-label-sm text-label-sm mt-0.5">{label}</span>
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* ── Overlays ── */}
+          {selectedRestaurant && (
+            <RestaurantSheet
+              restaurant={selectedRestaurant}
+              isFavorite={favorites.has(selectedRestaurant.id)}
+              onClose={() => setSelectedRestaurant(null)}
+              onToggleFavorite={() => toggleFavorite(selectedRestaurant.id)}
+              onAdd={(item) => { addToCart(item); }}
+            />
+          )}
+
+          {showFilters && (
+            <FilterSheet
+              activeFilters={filters}
+              onToggle={(id) => {
+                setFilters((prev) => {
+                  const next = new Set(prev);
+                  next.has(id) ? next.delete(id) : next.add(id);
+                  return next;
+                });
+              }}
+              onClear={() => setFilters(new Set())}
+              onApply={(next) => setFilters(next)}
+              onClose={() => setShowFilters(false)}
+            />
+          )}
+
+          {showCart && (
+            <CartSheet
+              cart={cart}
+              onClose={() => setShowCart(false)}
+              onUpdate={updateCart}
+              onCheckout={() => {
+                setShowCart(false);
+                if (cart.length) {
+                  setToast('Proceeding to checkout…');
+                  setCart([]);
+                } else {
+                  setToast('Your basket is empty');
+                }
+              }}
+            />
+          )}
+
+          {/* ── Toast ── */}
+          {toast && (
+            <div
+              className="toast fixed bottom-28 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100%-48px)] bg-inverse-surface text-inverse-on-surface font-label-lg text-label-lg px-5 py-3 rounded-full shadow-[0_12px_30px_rgba(0,0,0,0.20)] whitespace-nowrap"
+              role="status"
+              aria-live="polite"
+            >
+              {toast}
+            </div>
+          )}
         </div>
       );
     }
