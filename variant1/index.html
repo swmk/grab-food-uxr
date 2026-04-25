@@ -70,8 +70,8 @@
     body {
       background: #c8c8c8;
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      flex-direction: column;
+      align-items: center;
       min-height: 100vh;
     }
     #root {
@@ -821,7 +821,7 @@
     ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
   
-  <div id="disqus_thread"></div>
+  <div id="disqus_thread" style="width:100%;max-width:430px;"></div>
   <script>
       /**
       *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
