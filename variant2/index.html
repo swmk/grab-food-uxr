@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Food Search - Grab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#006e2e',
+            'primary-container': '#00b14f',
+            'on-primary': '#ffffff',
+            'on-primary-container': '#003a15',
+            'surface-tint': '#006e2e',
+            surface: '#f9f9f9',
+            'surface-dim': '#dadada',
+            'surface-container-lowest': '#ffffff',
+            'surface-container-low': '#f3f3f4',
+            'surface-container': '#eeeeee',
+            'surface-container-high': '#e8e8e8',
+            'surface-container-highest': '#e2e2e2',
+            'surface-variant': '#e2e2e2',
+            'on-surface': '#1a1c1c',
+            'on-surface-variant': '#3d4a3d',
+            outline: '#6d7b6c',
+            'outline-variant': '#bccbb9',
+            error: '#ba1a1a',
+            'on-error': '#ffffff',
+            tertiary: '#5d5f5f',
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+        },
+      },
+    };
+  </script>
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    @keyframes slide-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .slide-up { animation: slide-up 0.35s cubic-bezier(0.32, 0.72, 0, 1); }
+
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+    .fade-in { animation: fade-in 0.2s ease; }
+
+    @keyframes toast-in { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+    .toast-in { animation: toast-in 0.25s ease; }
+
+    @keyframes badge-bounce { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.5); } }
+    .badge-bounce { animation: badge-bounce 0.35s ease; }
+
+    @keyframes heart-pop { 0% { transform: scale(1); } 40% { transform: scale(1.4); } 70% { transform: scale(0.9); } 100% { transform: scale(1); } }
+    .heart-pop { animation: heart-pop 0.35s ease; }
+
+    body {
+      background: #c8c8c8;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    #root {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      background: #f9f9f9;
+      position: relative;
+      box-shadow: 0 0 60px rgba(0,0,0,0.3);
+    }
+    @media (max-width: 430px) {
+      body { background: #f9f9f9; }
+      #root { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback } = React;
+
+    /* ─── Data ─── */
+    const RESTAURANTS = [
+      {
+        id: 1,
+        name: "Master Wang's Hand-Pulled Noodles",
+        cuisine: 'Chinese • Noodles • Authentic',
+        rating: 4.8,
+        reviews: '2k+',
+        time: '25-35 min',
+        delivery: '$2.50',
+        promo: '20% OFF',
+        verified: true,
+        lastOrder: 'Most recent 2 days ago',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD-s_GTlYZ9WkJqEWtrjUuoZszEmPwKTScsbonWJ6nJH5-uQipncwvDLhiotUb8cZ_NQMJp3EvD9xZUMaitfOtW6IDnwG5bVxuE8FNFmBGz2ANRAxquuP7KyNjZuHftLS0w38bdJbQhCViNoAXzOsbdez0Vq7JQ_OyBntPN_WZPmoaUlXyArvAHJxLjyLIwKYYNAB8mEjYyYHTJNuiy5qiQZbfcKz3IAy57iIj2gKPXEJ5m1NVcwqGYtaOlfZgUUvxEuigkWStOhI4',
+        menu: [
+          { id: 'm1', name: 'Classic Hand-Pulled Noodles', price: 8.90, desc: 'Slow-cooked beef broth, hand-pulled noodles, fresh herbs' },
+          { id: 'm2', name: 'Spicy Beef Lamian', price: 10.50, desc: 'Extra spicy · Premium beef slices · House chilli oil' },
+          { id: 'm3', name: 'Veggie Sesame Noodles', price: 7.90, desc: 'Toasted sesame paste · Fresh garden vegetables' },
+        ],
+      },
+      {
+        id: 2,
+        name: 'Wok Star Express',
+        cuisine: 'Asian Fusion • Stir-fry • Quick Bite',
+        rating: 4.5,
+        reviews: '800+',
+        time: '15-25 min',
+        delivery: '$1.50',
+        promo: null,
+        verified: false,
+        lastOrder: null,
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDo_OJr1p6CM6K-183T4cxNpWX86IS0Rxan8kdds6LlFe0_RolbE9zXWjnglp9PxkEYn8qtYywPZ9PVP_5qdygd-tIuWe-r45nOybW7GKaaNcNyWmVyUI9hpew7e34fUPODr9gCdehQRT4jPquQ4vOWmOfENe-luSvWXnRFdPkSFZbf_FsJi3Yf0Db36ZKDru91IaPFukZuKInTIEPVhv2ji3kCakQZ61Uw1hqoxtZJRwKdlCuSVHFvv4v2RkboWowyqSBGggpkQYQ',
+        menu: [
+          { id: 'm4', name: 'Pad Thai Noodles', price: 9.50, desc: 'Rice noodles, shrimp, bean sprouts, crushed peanuts' },
+          { id: 'm5', name: 'Singapore Stir Fry', price: 8.90, desc: 'Curry powder, tiger prawns, egg noodles' },
+          { id: 'm6', name: 'Black Bean Beef Noodles', price: 10.90, desc: 'Rich fermented black bean sauce, tender beef' },
+        ],
+      },
+      {
+        id: 3,
+        name: 'Pho Saigon',
+        cuisine: 'Vietnamese • Noodles • Healthy',
+        rating: 4.6,
+        reviews: '1.2k+',
+        time: '20-30 min',
+        delivery: '$3.00',
+        promo: null,
+        verified: true,
+        lastOrder: null,
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAUB63YedhQQ9oCZQIuE4puaMEUZn0d8b1ZYf3eLV_Yg2X0OY57xFDeb4KiyeoI3J-OILXXJA_-V5VEUN5Voyh_XB6fwALI4KA_Zs0MRiw-BJUJD8lxiX1GhKU1Ri1rV5XGphLqtCMlxrnuVTgXz48GpxRL5QfMesf2dK63bCkGB4Hw6GSXHriZ-d6Wx3ubTxQ2gs8O1UgIgch4kjUqIZrzOMNCeo7azHhTLI1aGzvwhsbE4c6uH9pdHpboqWjZsLue2wOIbHZ0wJ4',
+        menu: [
+          { id: 'm7', name: 'Classic Beef Pho', price: 9.90, desc: '12-hour bone broth, rice noodles, fresh herbs & lime' },
+          { id: 'm8', name: 'Chicken Pho', price: 8.90, desc: 'Light clear broth, poached chicken, bean sprouts' },
+          { id: 'm9', name: 'Seafood Pho', price: 12.50, desc: 'Tiger prawns, squid, fish balls in golden broth' },
+        ],
+      },
+      {
+        id: 4,
+        name: 'Golden Dragon',
+        cuisine: 'Chinese • Dim Sum • Family',
+        rating: 4.3,
+        reviews: '500+',
+        time: '30-45 min',
+        delivery: '$2.00',
+        promo: 'Free Delivery',
+        verified: false,
+        lastOrder: null,
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBAEkIuD5IiIcRUbiVRGBUp6QvLPqofNeOLqUJgabmBkEGk4jWWUGDkXDjdjBC41jZ-MX5n4UyHApbVF__IeH_6IJA0v9GwqG_kdXIMOTo30MVc9Dsv9oJL1hoFMstKwAt6pWGtTcpvT_pOFsrdgM9daGswgwc-IVX59gcQDxo7J_bs6KcbO5F6zJjrTHRAxwjpDbz4W8IbLc-gzntDoRv3KzAnMXfP9rlLgP4dYjCjktzin8UkRDnDnpLdDpANFNRcZR1CvGb50a8',
+        menu: [
+          { id: 'm10', name: 'Pork Xiao Long Bao', price: 6.90, desc: 'Soup dumplings with rich pork broth · 6 pieces' },
+          { id: 'm11', name: 'Char Siu Bao', price: 5.50, desc: 'Fluffy BBQ pork buns · 3 pieces' },
+          { id: 'm12', name: 'Har Gow', price: 6.50, desc: 'Crystal steamed shrimp dumplings · 4 pieces' },
+        ],
+      },
+      {
+        id: 5,
+        name: 'Noodle Paradise',
+        cuisine: 'Pan-Asian • Noodles • Comfort Food',
+        rating: 4.7,
+        reviews: '3k+',
+        time: '20-30 min',
+        delivery: '$1.00',
+        promo: null,
+        verified: true,
+        lastOrder: null,
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDo_OJr1p6CM6K-183T4cxNpWX86IS0Rxan8kdds6LlFe0_RolbE9zXWjnglp9PxkEYn8qtYywPZ9PVP_5qdygd-tIuWe-r45nOybW7GKaaNcNyWmVyUI9hpew7e34fUPODr9gCdehQRT4jPquQ4vOWmOfENe-luSvWXnRFdPkSFZbf_FsJi3Yf0Db36ZKDru91IaPFukZuKInTIEPVhv2ji3kCakQZ61Uw1hqoxtZJRwKdlCuSVHFvv4v2RkboWowyqSBGggpkQYQ',
+        menu: [
+          { id: 'm13', name: 'Malaysian Curry Mee', price: 9.90, desc: 'Coconut milk curry, crispy tofu, tiger prawns' },
+          { id: 'm14', name: 'Japanese Ramen', price: 11.50, desc: 'Rich tonkotsu broth, chashu pork, soft-boiled egg' },
+          { id: 'm15', name: 'Korean Jjajangmyeon', price: 10.50, desc: 'Fermented black bean paste, diced pork, noodles' },
+        ],
+      },
+    ];
+
+    const QUICK_REORDERS = [
+      {
+        id: 'r1',
+        name: 'Dragon Bowl Noodles',
+        item: 'Spicy Beef Lamian',
+        qty: 2,
+        time: 'Delivered 2 days ago',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAUB63YedhQQ9oCZQIuE4puaMEUZn0d8b1ZYf3eLV_Yg2X0OY57xFDeb4KiyeoI3J-OILXXJA_-V5VEUN5Voyh_XB6fwALI4KA_Zs0MRiw-BJUJD8lxiX1GhKU1Ri1rV5XGphLqtCMlxrnuVTgXz48GpxRL5QfMesf2dK63bCkGB4Hw6GSXHriZ-d6Wx3ubTxQ2gs8O1UgIgch4kjUqIZrzOMNCeo7azHhTLI1aGzvwhsbE4c6uH9pdHpboqWjZsLue2wOIbHZ0wJ4',
+      },
+      {
+        id: 'r2',
+        name: 'Dim Sum House',
+        item: 'Pork Xiao Long Bao',
+        qty: 1,
+        time: 'Delivered last week',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBAEkIuD5IiIcRUbiVRGBUp6QvLPqofNeOLqUJgabmBkEGk4jWWUGDkXDjdjBC41jZ-MX5n4UyHApbVF__IeH_6IJA0v9GwqG_kdXIMOTo30MVc9Dsv9oJL1hoFMstKwAt6pWGtTcpvT_pOFsrdgM9daGswgwc-IVX59gcQDxo7J_bs6KcbO5F6zJjrTHRAxwjpDbz4W8IbLc-gzntDoRv3KzAnMXfP9rlLgP4dYjCjktzin8UkRDnDnpLdDpANFNRcZR1CvGb50a8',
+      },
+      {
+        id: 'r3',
+        name: 'Noodle Paradise',
+        item: 'Malaysian Curry Mee',
+        qty: 1,
+        time: 'Delivered 5 days ago',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDo_OJr1p6CM6K-183T4cxNpWX86IS0Rxan8kdds6LlFe0_RolbE9zXWjnglp9PxkEYn8qtYywPZ9PVP_5qdygd-tIuWe-r45nOybW7GKaaNcNyWmVyUI9hpew7e34fUPODr9gCdehQRT4jPquQ4vOWmOfENe-luSvWXnRFdPkSFZbf_FsJi3Yf0Db36ZKDru91IaPFukZuKInTIEPVhv2ji3kCakQZ61Uw1hqoxtZJRwKdlCuSVHFvv4v2RkboWowyqSBGggpkQYQ',
+      },
+    ];
+
+    const FILTERS = [
+      { id: 'authentic', label: 'Authentic Cuisine' },
+      { id: 'rating',    label: 'Rating 4.5+' },
+      { id: 'distance',  label: 'Under 2km' },
+      { id: 'promo',     label: 'Promotions' },
+      { id: 'fast',      label: 'Under 30 min' },
+    ];
+
+    const NAV_ITEMS = [
+      { id: 'home',     icon: 'home',        label: 'Home' },
+      { id: 'activity', icon: 'receipt_long', label: 'Activity' },
+      { id: 'messages', icon: 'chat_bubble',  label: 'Messages' },
+      { id: 'account',  icon: 'person',       label: 'Account' },
+    ];
+
+    /* ─── Icon ─── */
+    const Icon = ({ name, fill = false, size = 24, className = '' }) => (
+      <span
+        className={`material-symbols-outlined select-none ${className}`}
+        style={{
+          fontSize: size,
+          fontVariationSettings: `'FILL' ${fill ? 1 : 0}`,
+          lineHeight: 1,
+          display: 'inline-flex',
+          alignItems: 'center',
+        }}
+      >{name}</span>
+    );
+
+    /* ─── Toast ─── */
+    const Toast = ({ message }) => (
+      <div className="toast-in fixed z-[200] bottom-24 left-1/2 -translate-x-1/2 bg-[#1a1c1c] text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-xl whitespace-nowrap pointer-events-none">
+        {message}
+      </div>
+    );
+
+    /* ─── Cart Sheet ─── */
+    const CartSheet = ({ items, onClose, onClear }) => (
+      <div className="fixed inset-0 z-[150] flex items-end justify-center" onClick={onClose}>
+        <div className="absolute inset-0 bg-black/40 fade-in" />
+        <div
+          className="relative w-full max-w-[430px] bg-white rounded-t-2xl overflow-hidden slide-up max-h-[70vh] flex flex-col"
+          onClick={e => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between px-4 pt-4 pb-3 border-b border-[#eeeeee] shrink-0">
+            <h2 className="text-lg font-semibold text-[#1a1c1c]">Your Basket</h2>
+            <button onClick={onClose} className="p-1 rounded-full hover:bg-[#f3f3f4] transition-colors">
+              <Icon name="close" size={20} className="text-[#6d7b6c]" />
+            </button>
+          </div>
+          <div className="overflow-y-auto flex-1 px-4 py-3 space-y-3">
+            {items.length === 0 ? (
+              <div className="text-center py-8 text-[#6d7b6c]">
+                <Icon name="shopping_basket" size={40} className="text-[#bccbb9] mb-2" />
+                <p className="text-sm">Your basket is empty</p>
+              </div>
+            ) : items.map((item, i) => (
+              <div key={item.id + i} className="flex items-center gap-3 p-3 bg-[#f3f3f4] rounded-xl">
+                <div className="w-8 h-8 rounded-full bg-[#006e2e] text-white flex items-center justify-center text-xs font-bold shrink-0">{item.qty}</div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-[#1a1c1c] truncate">{item.name}</p>
+                  {item.price > 0 && <p className="text-xs text-[#6d7b6c]">${(item.price * item.qty).toFixed(2)}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+          {items.length > 0 && (
+            <div className="px-4 pt-3 pb-6 border-t border-[#eeeeee] shrink-0 space-y-2">
+              <div className="flex justify-between items-center text-sm text-[#1a1c1c] font-semibold mb-3">
+                <span>Total</span>
+                <span>${items.reduce((s, i) => s + i.price * i.qty, 0).toFixed(2)}</span>
+              </div>
+              <button
+                className="w-full py-3 bg-[#006e2e] text-white font-semibold rounded-xl active:scale-[0.98] transition-transform text-sm"
+                onClick={onClose}
+              >
+                Place Order
+              </button>
+              <button className="w-full py-2 text-[#ba1a1a] text-sm font-medium" onClick={onClear}>
+                Clear basket
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+
+    /* ─── Restaurant Detail Sheet ─── */
+    const RestaurantSheet = ({ restaurant, onClose, onAddToCart }) => {
+      if (!restaurant) return null;
+      return (
+        <div className="fixed inset-0 z-[100] flex items-end justify-center" onClick={onClose}>
+          <div className="absolute inset-0 bg-black/40 fade-in" />
+          <div
+            className="relative w-full max-w-[430px] bg-white rounded-t-2xl overflow-hidden slide-up max-h-[82vh] flex flex-col"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="relative h-44 shrink-0">
+              <img src={restaurant.image} alt={restaurant.name} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              <button
+                onClick={onClose}
+                className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur flex items-center justify-center shadow active:scale-90 transition-transform"
+              >
+                <Icon name="close" size={20} className="text-[#1a1c1c]" />
+              </button>
+              {restaurant.promo && (
+                <div className="absolute bottom-3 left-3 bg-[#006e2e] text-white text-xs font-semibold px-2 py-1 rounded flex items-center gap-1">
+                  <Icon name="local_offer" size={13} />
+                  {restaurant.promo}
+                </div>
+              )}
+            </div>
+
+            <div className="px-4 pt-4 pb-3 border-b border-[#eeeeee] shrink-0">
+              <h2 className="text-xl font-bold text-[#1a1c1c] leading-tight">{restaurant.name}</h2>
+              <p className="text-sm text-[#3d4a3d] mt-0.5">{restaurant.cuisine}</p>
+              <div className="flex items-center gap-4 mt-2">
+                <div className="flex items-center gap-1 text-sm text-[#1a1c1c]">
+                  <Icon name="star" fill size={15} className="text-[#FFB000]" />
+                  <span className="font-semibold">{restaurant.rating}</span>
+                  {restaurant.verified && (
+                    <Icon name="verified_user" size={14} className="text-[#006e2e] ml-0.5" />
+                  )}
+                  <span className="text-[#6d7b6c]">({restaurant.reviews})</span>
+                </div>
+                <div className="flex items-center gap-1 text-sm text-[#6d7b6c]">
+                  <Icon name="schedule" size={15} />
+                  {restaurant.time}
+                </div>
+                <div className="flex items-center gap-1 text-sm text-[#6d7b6c]">
+                  <Icon name="directions_bike" size={15} />
+                  {restaurant.delivery}
+                </div>
+              </div>
+            </div>
+
+            <div className="overflow-y-auto flex-1 px-4 pb-8">
+              <p className="text-xs font-semibold text-[#6d7b6c] uppercase tracking-widest mt-4 mb-3">Popular Items</p>
+              <div className="space-y-3">
+                {restaurant.menu.map(item => (
+                  <div key={item.id} className="flex items-center gap-3 p-3 bg-[#f3f3f4] rounded-2xl">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm text-[#1a1c1c]">{item.name}</p>
+                      <p className="text-xs text-[#6d7b6c] mt-0.5 leading-relaxed">{item.desc}</p>
+                      <p className="text-sm font-bold text-[#006e2e] mt-1.5">${item.price.toFixed(2)}</p>
+                    </div>
+                    <button
+                      onClick={() => onAddToCart(item.name, item.price)}
+                      className="w-9 h-9 rounded-full bg-[#006e2e] text-white flex items-center justify-center active:scale-90 transition-transform shrink-0 shadow-sm"
+                    >
+                      <Icon name="add" size={20} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    /* ─── Favorite Button ─── */
+    const FavoriteButton = ({ isFavorite, onToggle }) => {
+      const [animKey, setAnimKey] = useState(0);
+      const handleClick = (e) => {
+        setAnimKey(k => k + 1);
+        onToggle(e);
+      };
+      return (
+        <button
+          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur flex items-center justify-center shadow-sm active:scale-90 transition-transform"
+          onClick={handleClick}
+        >
+          <span key={animKey} className={isFavorite ? 'heart-pop' : ''} style={{ display: 'inline-flex' }}>
+            <Icon
+              name="favorite"
+              fill={isFavorite}
+              size={20}
+              className={isFavorite ? 'text-[#ba1a1a]' : 'text-[#1a1c1c]'}
+            />
+          </span>
+        </button>
+      );
+    };
+
+    /* ─── Restaurant Card (Variant 2) ─── */
+    /* Key difference: verified_user icon inline next to rating number, not a separate text label */
+    const RestaurantCard = ({ restaurant, isFavorite, onToggleFavorite, onClick }) => {
+      const [tapped, setTapped] = useState(false);
+      const handleClick = () => {
+        setTapped(true);
+        setTimeout(() => setTapped(false), 150);
+        onClick();
+      };
+      return (
+        <article
+          className="bg-white rounded-xl overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.06)] border border-[#eeeeee] cursor-pointer"
+          style={{ transform: tapped ? 'scale(0.985)' : 'scale(1)', transition: 'transform 0.15s ease' }}
+          onClick={handleClick}
+        >
+          <div className="relative h-48 w-full overflow-hidden">
+            <img src={restaurant.image} alt={restaurant.name} className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+            <FavoriteButton
+              isFavorite={isFavorite}
+              onToggle={e => { e.stopPropagation(); onToggleFavorite(restaurant.id); }}
+            />
+            {restaurant.promo && (
+              <div className="absolute bottom-3 left-3 bg-[#006e2e] text-white font-semibold text-xs px-2 py-1 rounded flex items-center gap-1 shadow">
+                <Icon name="local_offer" size={13} />
+                {restaurant.promo}
+              </div>
+            )}
+          </div>
+
+          <div className="p-4">
+            <h3 className="font-semibold text-[20px] leading-[28px] text-[#1a1c1c] truncate">{restaurant.name}</h3>
+            <p className="text-sm text-[#3d4a3d] mt-0.5 mb-2 truncate">{restaurant.cuisine}</p>
+
+            {/* Credibility block — variant 2: compact inline with verified_user icon */}
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-3">
+              <div className="flex items-center text-[#1a1c1c] text-xs font-medium">
+                <Icon name="star" fill size={16} className="text-[#FFB000] mr-0.5" />
+                {restaurant.rating}
+                {restaurant.verified && (
+                  <Icon name="verified_user" size={14} className="text-[#006e2e] ml-1" title="Verified" />
+                )}
+                <span className="text-[#6d7b6c] font-normal ml-1">({restaurant.reviews})</span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#eeeeee]">
+              <div className="flex items-center gap-3 text-sm text-[#1a1c1c]">
+                <div className="flex items-center gap-1">
+                  <Icon name="schedule" size={15} className="text-[#6d7b6c]" />
+                  {restaurant.time}
+                </div>
+                <div className="flex items-center gap-1">
+                  <Icon name="directions_bike" size={15} className="text-[#6d7b6c]" />
+                  {restaurant.delivery}
+                </div>
+              </div>
+              {restaurant.lastOrder && (
+                <p className="text-[10px] text-[#6d7b6c]">{restaurant.lastOrder}</p>
+              )}
+            </div>
+          </div>
+        </article>
+      );
+    };
+
+    /* ─── Cart Badge ─── */
+    const CartBadge = ({ count }) => {
+      const [animKey, setAnimKey] = useState(0);
+      const prevCount = useRef(count);
+      useEffect(() => {
+        if (count !== prevCount.current) {
+          setAnimKey(k => k + 1);
+          prevCount.current = count;
+        }
+      }, [count]);
+      if (count === 0) return null;
+      return (
+        <span
+          key={animKey}
+          className="badge-bounce absolute top-0.5 right-0.5 bg-[#ba1a1a] text-white text-[9px] font-bold min-w-[16px] h-4 px-0.5 rounded-full flex items-center justify-center leading-none"
+        >
+          {count > 9 ? '9+' : count}
+        </span>
+      );
+    };
+
+    /* ─── App ─── */
+    const App = () => {
+      const [search, setSearch]               = useState('Noodles');
+      const [segment, setSegment]             = useState('recent');
+      const [activeFilters, setActiveFilters] = useState(new Set(['authentic']));
+      const [cartItems, setCartItems]         = useState([
+        { id: 'init1', name: 'Spicy Beef Lamian',   qty: 1, price: 10.50 },
+        { id: 'init2', name: 'Pork Xiao Long Bao',  qty: 1, price: 6.90  },
+      ]);
+      const [favorites, setFavorites]         = useState(new Set());
+      const [visibleCount, setVisibleCount]   = useState(2);
+      const [activeNav, setActiveNav]         = useState('activity');
+      const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+      const [showCart, setShowCart]           = useState(false);
+      const [toast, setToast]                 = useState(null);
+      const [toastKey, setToastKey]           = useState(0);
+      const toastTimer = useRef(null);
+
+      const cartCount = cartItems.reduce((s, i) => s + i.qty, 0);
+
+      const showToast = useCallback((msg) => {
+        if (toastTimer.current) clearTimeout(toastTimer.current);
+        setToast(msg);
+        setToastKey(k => k + 1);
+        toastTimer.current = setTimeout(() => setToast(null), 2200);
+      }, []);
+
+      const addToCart = useCallback((name, price = 0, qty = 1) => {
+        setCartItems(prev => {
+          const existing = prev.find(i => i.name === name);
+          if (existing) return prev.map(i => i.name === name ? { ...i, qty: i.qty + qty } : i);
+          return [...prev, { id: Date.now().toString(), name, qty, price }];
+        });
+        showToast('Added to basket');
+        setSelectedRestaurant(null);
+      }, [showToast]);
+
+      const handleQuickReorder = useCallback((r) => {
+        addToCart(r.item, 10.50, r.qty);
+        showToast(`Reordered "${r.item}"`);
+      }, [addToCart, showToast]);
+
+      const toggleFavorite = useCallback((id) => {
+        setFavorites(prev => {
+          const next = new Set(prev);
+          if (next.has(id)) { next.delete(id); showToast('Removed from favourites'); }
+          else { next.add(id); showToast('Saved to favourites'); }
+          return next;
+        });
+      }, [showToast]);
+
+      const toggleFilter = useCallback((id) => {
+        setActiveFilters(prev => {
+          const next = new Set(prev);
+          if (next.has(id)) next.delete(id); else next.add(id);
+          return next;
+        });
+      }, []);
+
+      const filtered = RESTAURANTS.filter(r => {
+        const q = search.toLowerCase();
+        if (!q) return true;
+        return r.name.toLowerCase().includes(q) || r.cuisine.toLowerCase().includes(q);
+      });
+
+      const visible = filtered.slice(0, visibleCount);
+
+      return (
+        <div className="flex flex-col min-h-screen bg-[#f9f9f9] relative">
+
+          {/* ── Header ── */}
+          <header className="bg-white sticky top-0 z-50 border-b border-[#e8e8e8] shadow-sm flex justify-between items-center px-4 h-14 shrink-0">
+            <button className="p-2 rounded-full hover:bg-[#f3f3f4] transition-colors active:scale-90 text-[#1a1c1c]">
+              <Icon name="arrow_back" size={24} />
+            </button>
+            <h1 className="text-[24px] font-bold leading-[32px] tracking-[-0.01em] text-[#006e2e] flex-1 text-center px-4">Food Search</h1>
+            <button
+              onClick={() => setShowCart(true)}
+              className="p-2 rounded-full hover:bg-[#f3f3f4] transition-colors relative active:scale-90 text-[#1a1c1c]"
+            >
+              <Icon name="shopping_basket" size={24} />
+              <CartBadge count={cartCount} />
+            </button>
+          </header>
+
+          {/* ── Search & Filter bar ── */}
+          <div className="bg-white pt-2 pb-3 px-4 sticky top-14 z-40 border-b border-[#eeeeee] shrink-0">
+            {/* Search input */}
+            <div className="relative mb-4">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Icon name="search" size={20} className="text-[#6d7b6c]" />
+              </div>
+              <input
+                className="block w-full pl-10 pr-10 py-3 border border-[#e2e2e2] rounded-lg bg-white placeholder-[#6d7b6c] focus:outline-none focus:ring-1 focus:ring-[#006e2e] focus:border-[#006e2e] text-sm transition-all text-[#1a1c1c]"
+                placeholder="Search for dishes, restaurants…"
+                value={search}
+                onChange={e => { setSearch(e.target.value); setVisibleCount(2); }}
+              />
+              {search && (
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                  <button
+                    onClick={() => { setSearch(''); setVisibleCount(2); }}
+                    className="text-[#6d7b6c] hover:text-[#1a1c1c] transition-colors active:scale-90"
+                  >
+                    <Icon name="cancel" size={20} />
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Segmented control */}
+            <div className="flex p-1 bg-[#f3f3f4] rounded-lg mb-3">
+              {[{ id: 'recent', label: 'Recent' }, { id: 'saved', label: 'Saved Places' }].map(({ id, label }) => (
+                <button
+                  key={id}
+                  onClick={() => setSegment(id)}
+                  className={`flex-1 py-1.5 text-center rounded-md text-xs font-medium transition-all ${
+                    segment === id
+                      ? 'bg-white text-[#1a1c1c] shadow-sm'
+                      : 'text-[#3d4a3d] hover:bg-[#e8e8e8]'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {/* Filter chips */}
+            <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1 -mx-4 px-4">
+              <button className="flex-none inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-[#e2e2e2] bg-white text-[#1a1c1c] text-xs font-medium hover:bg-[#f3f3f4] transition-colors whitespace-nowrap active:scale-95">
+                <Icon name="tune" size={15} /> Filters
+              </button>
+              {FILTERS.map(({ id, label }) => {
+                const active = activeFilters.has(id);
+                return (
+                  <button
+                    key={id}
+                    onClick={() => toggleFilter(id)}
+                    className={`flex-none inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap active:scale-95 ${
+                      active
+                        ? 'bg-[#00b14f] text-[#003a15] font-semibold border-none'
+                        : 'border border-[#e2e2e2] bg-white text-[#1a1c1c] hover:bg-[#f3f3f4]'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ── Main scroll area ── */}
+          <main className="flex-1 pb-20 hide-scrollbar overflow-y-visible">
+
+            {/* Quick Reorder */}
+            {segment === 'recent' && (
+              <section className="pt-4 pb-2">
+                <h2 className="px-4 text-[20px] font-semibold leading-[28px] text-[#1a1c1c] mb-3">Quick Reorder</h2>
+                <div className="flex gap-4 overflow-x-auto hide-scrollbar px-4 pb-2">
+                  {QUICK_REORDERS.map(r => (
+                    <div
+                      key={r.id}
+                      className="flex-none w-[280px] bg-white rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-[#eeeeee] p-3 flex items-center gap-3"
+                    >
+                      <div className="w-16 h-16 rounded-lg overflow-hidden bg-[#eeeeee] shrink-0">
+                        <img src={r.image} alt={r.name} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-[14px] font-semibold leading-[18px] text-[#1a1c1c] truncate">{r.name}</h3>
+                        <p className="text-[14px] text-[#3d4a3d] truncate mt-0.5">{r.item} · {r.qty}×</p>
+                        <p className="text-[10px] text-[#6d7b6c] mt-0.5">{r.time}</p>
+                      </div>
+                      <button
+                        onClick={() => handleQuickReorder(r)}
+                        className="shrink-0 w-10 h-10 rounded-full bg-[#00b14f] text-[#003a15] flex items-center justify-center hover:bg-[#006e2e] hover:text-white transition-colors active:scale-90 shadow-sm"
+                      >
+                        <Icon name="add_shopping_cart" fill size={20} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {segment === 'saved' && (
+              <div className="px-4 py-10 flex flex-col items-center text-center text-[#6d7b6c]">
+                <Icon name="bookmark_border" size={48} className="text-[#bccbb9] mb-3" />
+                <p className="font-medium text-[#1a1c1c]">No saved places yet</p>
+                <p className="text-sm mt-1">Tap ♡ on any restaurant to save it here</p>
+              </div>
+            )}
+
+            {/* Divider */}
+            <div className="h-1 bg-[#eeeeee] w-full mt-2" />
+
+            {/* Results */}
+            <section className="px-4 pt-4 pb-4 space-y-6">
+              <h2 className="text-[20px] font-semibold leading-[28px] text-[#1a1c1c]">
+                Showing {filtered.length} result{filtered.length !== 1 ? 's' : ''}
+              </h2>
+
+              {/* Busy banner — variant 2: no dismiss button */}
+              <div className="bg-[#e8e8e8] rounded-lg p-3 flex items-start gap-3 border border-[#e2e2e2]">
+                <Icon name="info" size={20} className="text-[#5d5f5f] mt-0.5 shrink-0" />
+                <div className="flex-1">
+                  <p className="text-xs font-medium text-[#1a1c1c]">Some popular spots are busy right now</p>
+                  <p className="text-xs text-[#3d4a3d] mt-0.5">Delivery times may be longer than usual.</p>
+                </div>
+              </div>
+
+              {/* Empty state */}
+              {visible.length === 0 && (
+                <div className="text-center py-16 text-[#6d7b6c]">
+                  <Icon name="search_off" size={52} className="text-[#bccbb9] mb-3" />
+                  <p className="font-semibold text-[#1a1c1c]">No results found</p>
+                  <p className="text-sm mt-1">Try a different search term</p>
+                </div>
+              )}
+
+              {/* Cards */}
+              {visible.map(r => (
+                <RestaurantCard
+                  key={r.id}
+                  restaurant={r}
+                  isFavorite={favorites.has(r.id)}
+                  onToggleFavorite={toggleFavorite}
+                  onClick={() => setSelectedRestaurant(r)}
+                />
+              ))}
+
+              {/* Load more */}
+              {visible.length < filtered.length && (
+                <div className="pt-2 pb-4 flex justify-center">
+                  <button
+                    onClick={() => setVisibleCount(n => n + 2)}
+                    className="px-6 py-2 border-2 border-[#e2e2e2] rounded-full text-xs font-semibold text-[#1a1c1c] hover:bg-[#f3f3f4] transition-colors active:scale-95"
+                  >
+                    Load {Math.min(filtered.length - visible.length, 2)} More Results
+                  </button>
+                </div>
+              )}
+
+              {visible.length >= filtered.length && filtered.length > 0 && (
+                <p className="text-center text-xs text-[#6d7b6c] pb-2">You've seen all results</p>
+              )}
+            </section>
+          </main>
+
+          {/* ── Bottom Nav ── */}
+          <nav
+            className="bg-white border-t border-[#eeeeee] shadow-[0_-4px_12px_rgba(0,0,0,0.08)] flex justify-around items-center h-16 shrink-0"
+            style={{
+              position: 'fixed',
+              bottom: 0,
+              width: '100%',
+              maxWidth: 430,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 50,
+            }}
+          >
+            {NAV_ITEMS.map(({ id, icon, label }) => {
+              const active = activeNav === id;
+              return (
+                <button
+                  key={id}
+                  onClick={() => setActiveNav(id)}
+                  className={`flex flex-col items-center justify-center w-full h-full transition-colors active:scale-90 ${
+                    active ? 'text-[#006e2e]' : 'text-[#6d7b6c] hover:text-[#006e2e]'
+                  }`}
+                >
+                  <Icon name={icon} fill={active} size={24} className="mb-0.5" />
+                  <span className={`text-[10px] ${active ? 'font-bold' : 'font-normal'}`}>{label}</span>
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* ── Restaurant detail sheet ── */}
+          {selectedRestaurant && (
+            <RestaurantSheet
+              restaurant={selectedRestaurant}
+              onClose={() => setSelectedRestaurant(null)}
+              onAddToCart={addToCart}
+            />
+          )}
+
+          {/* ── Cart sheet ── */}
+          {showCart && (
+            <CartSheet
+              items={cartItems}
+              onClose={() => setShowCart(false)}
+              onClear={() => { setCartItems([]); setShowCart(false); showToast('Basket cleared'); }}
+            />
+          )}
+
+          {/* ── Toast ── */}
+          {toast && <Toast key={toastKey} message={toast} />}
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
